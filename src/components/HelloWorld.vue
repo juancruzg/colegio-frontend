@@ -1,16 +1,11 @@
 <template>
-  <div class="hello"></div>
+  <q-page class="flex flex-center">Holi</q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<style></style>
 
-export default defineComponent({
+<script>
+export default {
   name: "HelloWorld",
-  props: {
-    msg: String,
-  },
-});
+};
 </script>
-
-<style scoped lang="scss"></style>

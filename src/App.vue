@@ -1,16 +1,30 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import LayoutHeader from "./layout/LayoutHeader.vue";
+import LayoutDrawer from "./layout/LayoutDrawer.vue";
+import LayoutFooter from "./layout/LayoutFooter.vue";
+
+const isLeftDrawerOpen = ref(true);
+
+const toggleLeftDrawer = () => {
+  isLeftDrawerOpen.value = !isLeftDrawerOpen.value;
+};
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <q-layout view="hhh LpR fff">
+    <layout-header :toggle-left-drawer="toggleLeftDrawer" />
+    <layout-drawer v-model="isLeftDrawerOpen" />
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+    <layout-footer />
+  </q-layout>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+.drawer-option-active {
+  color: white !important;
+  background: $grey-9;
 }
 </style>
