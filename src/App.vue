@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import LayoutHeader from "./layout/LayoutHeader.vue";
-import LayoutDrawer from "./layout/LayoutDrawer.vue";
+import LayoutDrawer from "./layout/drawer/LayoutDrawer.vue";
 import LayoutFooter from "./layout/LayoutFooter.vue";
 
 const isLeftDrawerOpen = ref(true);

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 export interface LayoutHeaderProps {
   toggleLeftDrawer: () => void;
 }
 
 defineProps<LayoutHeaderProps>();
+
+const search = ref("");
 </script>
 
 <template>
@@ -21,12 +23,25 @@ defineProps<LayoutHeaderProps>();
       />
       <q-separator dark vertical inset />
       <q-toolbar-title> Colegio Admin </q-toolbar-title>
+      <q-input
+        dense
+        rounded
+        standout="bg-blue-grey-9"
+        outlined
+        v-model="search"
+        placeholder="Buscar"
+        class="col-5"
+      >
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+      <q-space />
+      <q-btn dense flat round icon="settings" class="q-mr-sm" />
     </q-toolbar>
-
-    <q-tabs align="left">
-      <q-route-tab to="/page1" label="Page One" />
-      <q-route-tab to="/page2" label="Page Two" />
-      <q-route-tab to="/page3" label="Page Three" />
+    <q-tabs align="left" inline-label>
+      <q-route-tab to="/page1" label="Agregar nota" icon="add" />
+      <q-route-tab to="/page2" label="Ver promedios" />
     </q-tabs>
   </q-header>
 </template>
