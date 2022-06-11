@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, ref } from "vue";
-import { Student } from "./student";
+import { Student } from "@/models/entities/student";
+import { Timestamp } from "firebase/firestore";
 
 interface StudentsTableProps {
   students: Student[];
+  loading: boolean;
 }
 
 defineProps<StudentsTableProps>();
@@ -35,15 +37,15 @@ const columns = [
     label: "Edad",
     align: "center" as const,
     field: (row: Student) => row.birthDate,
-    format: (val: string) =>
-      new Date().getFullYear() - new Date(val).getFullYear(),
+    format: (val: Timestamp) =>
+      new Date().getFullYear() - val.toDate().getFullYear(),
   },
   {
     name: "grade",
     label: "Año",
     align: "center" as const,
     field: (row: Student) => row.grade,
-    format: (val: number) => `${val}º`,
+    format: (val: number) => (val ? `${val}º` : null),
     sortable: true,
   },
   {
@@ -148,6 +150,8 @@ const initialPagination = {
       title="Alumnos"
       row-key="id"
       separator="cell"
+      :loading="loading"
+      loading-label=""
       :filter="{
         search: searchFilter,
         grade: gradeFilter,
@@ -198,6 +202,16 @@ const initialPagination = {
           label="Nuevo alumno"
           @click="$router.push('students/new')"
         />
+      </template>
+      <template v-slot:loading>
+        <q-inner-loading showing color="primary" />
+      </template>
+      <template v-slot:no-data="{ message }">
+        <div class="full-width row flex-center q-gutter-sm">
+          <span>
+            {{ message }}
+          </span>
+        </div>
       </template>
     </q-table>
   </div>

@@ -1,45 +1,37 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  Query,
+  query,
+} from "firebase/firestore";
+import { Student } from "@/models/entities/student";
 import StudentsTable from "./StudentsTable.vue";
-import { Student } from "./student";
 
 const router = useRouter();
-const students: Student[] = [
-  {
-    id: 37544355,
-    birthDate: "1994-03-30",
-    name: "Juan",
-    surname: "Grasso",
-    grade: 3,
-    division: "A",
-  },
-  {
-    id: 44512322,
-    birthDate: "2001-06-13",
-    name: "Nicolás",
-    surname: "Grasso",
-    grade: 1,
-    division: "A",
-  },
-  {
-    id: 48123232,
-    birthDate: "2003-12-13",
-    name: "Milagros",
-    surname: "Grasso",
-    grade: 2,
-    division: "C",
-  },
-  {
-    id: 49123232,
-    birthDate: "2005-08-08",
-    name: "Federica",
-    surname: "Grasso",
-    grade: 5,
-    division: "B",
-  },
-];
+const students = ref<Student[]>([]);
+const isLoading = ref(true);
 
-const getStudents = () => students;
+onMounted(async () => {
+  const getStudents = async (): Promise<Student[]> => {
+    const firestore = getFirestore();
+    const studentsRef = collection(firestore, "students") as Query<Student>;
+    const studentsQuery = query<Student>(studentsRef);
+    const studentsQuerySnapshot = await getDocs(studentsQuery);
+
+    const students = studentsQuerySnapshot.docs.map((student) =>
+      student.data()
+    );
+
+    return students;
+  };
+
+  students.value = await getStudents();
+  isLoading.value = false;
+});
 
 const handleRowClick = (_: Event, student: Student) => {
   router.push(`students/${student.id}`);
@@ -47,5 +39,9 @@ const handleRowClick = (_: Event, student: Student) => {
 </script>
 
 <template>
-  <students-table :students="getStudents()" @row-click="handleRowClick" />
+  <students-table
+    :students="students"
+    @row-click="handleRowClick"
+    :loading="isLoading"
+  />
 </template>

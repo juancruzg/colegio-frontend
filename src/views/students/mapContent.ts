@@ -1,11 +1,3 @@
-import { Genders } from "@/enums/Genders";
-
-export const gendersMap = new Map<Genders, string>([
-  [Genders.MALE, "Masculino"],
-  [Genders.FEMALE, "Femenino"],
-  [Genders.OTHER, "Otro"],
-]);
-
 export const studentForm = {
   name: {
     label: "Nombre",
@@ -45,4 +37,8 @@ export const studentForm = {
     label: "Email",
   },
   submitButton: "guardar",
+};
+
+export const messages = {
+  success: "El alumno ha sido agregado correctamente",
 };

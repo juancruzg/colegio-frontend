@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineEmits, ref } from "vue";
-import { Division } from "./division";
+import { Division } from "@/models/entities/division";
 import { divisionForm } from "./mapContent";
 
 const name = ref<string>();

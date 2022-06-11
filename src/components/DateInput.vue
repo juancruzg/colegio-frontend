@@ -3,11 +3,11 @@ import { date, QPopupProxy } from "quasar";
 import { defineEmits, defineProps, ref } from "vue";
 
 export interface DateInput {
-  rules?: any[];
+  rules?: ((val: string) => string | boolean)[];
   clearable?: boolean;
   label?: string;
   hint?: string;
-  modelValue?: string | null;
+  modelValue?: Date | null;
   hideBottomSpace?: boolean;
   defaultYearMonth?: string;
 }
@@ -17,8 +17,12 @@ const emit = defineEmits(["update:modelValue"]);
 
 const qDateProxy = ref<QPopupProxy>();
 
-const handleInput = (value: string | number | null) => {
-  emit("update:modelValue", value);
+const handleInput = (value: string | null) => {
+  if (!value) {
+    return emit("update:modelValue", null);
+  }
+
+  emit("update:modelValue", date.extractDate(value, "DD [de] MMMM, YYYY"));
   qDateProxy.value?.hide();
 };
 const handleClear = () => {
@@ -32,7 +36,7 @@ const handleClear = () => {
     @clear="handleClear"
     :clearable="clearable"
     :hide-bottom-space="hideBottomSpace"
-    :model-value="modelValue ? date.extractDate(modelValue!, 'DD [de] MMMM, YYYY') : null"
+    :model-value="modelValue || null"
     :label="label"
     :hint="hint"
     :stack-label="!!modelValue"
@@ -43,7 +47,7 @@ const handleClear = () => {
     </template>
     <template v-slot:control>
       <div class="self-center full-width no-outline" tabindex="0">
-        {{ modelValue }}
+        {{ modelValue && date.formatDate(modelValue, "DD [de] MMMM, YYYY") }}
       </div>
     </template>
     <q-popup-proxy

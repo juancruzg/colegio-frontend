@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { defineEmits, ref } from "vue";
 import { Genders } from "@/enums/Genders";
-import { gendersMap, studentForm } from "./mapContent";
 import DateInput from "@/components/DateInput.vue";
-import { Student } from "./student";
+import { Student } from "@/models/entities/student";
+import { studentForm } from "./mapContent";
+import GendersOption from "@/components/gendersOption/GendersOption.vue";
+import { States } from "@/enums/States";
+import StatesOption from "@/components/statesOption/StatesOption.vue";
 
 const MAX_STUDENTS_AGE = 18;
 const today = new Date();
@@ -17,24 +20,9 @@ const address2 = ref<string | null>(null);
 const phoneNumber = ref<string | null>(null);
 const email = ref<string | null>(null);
 const city = ref<string | null>(null);
-const state = ref<string | null>(null);
-const birthDate = ref<string | null>(null);
+const state = ref<States | null>(null);
+const birthDate = ref<Date | null>(null);
 const gender = ref<Genders | null>(null);
-
-const options = [
-  {
-    label: gendersMap.get(Genders.MALE),
-    value: Genders.MALE,
-  },
-  {
-    label: gendersMap.get(Genders.FEMALE),
-    value: Genders.FEMALE,
-  },
-  {
-    label: gendersMap.get(Genders.OTHER),
-    value: Genders.OTHER,
-  },
-];
 
 const emit = defineEmits<{
   (e: "submit", student: Student): void;
@@ -89,7 +77,7 @@ const handleSubmit = () => {
           filled
           lazy-rules
           hide-bottom-space
-          class="col-grow"
+          class="col"
           v-model="name"
           :label="`${studentForm.name.label} *`"
           :rules="[
@@ -100,7 +88,7 @@ const handleSubmit = () => {
           filled
           lazy-rules
           hide-bottom-space
-          class="col-grow q-ml-sm"
+          class="col q-ml-sm"
           v-model="surname"
           :label="`${studentForm.surname.label} *`"
           :rules="[
@@ -108,7 +96,7 @@ const handleSubmit = () => {
           ]"
         />
       </div>
-      <q-select filled v-model="gender" :options="options" label="Género" />
+      <genders-option clearable v-model="gender" />
       <date-input
         clearable
         hide-bottom-space
@@ -126,31 +114,25 @@ const handleSubmit = () => {
           filled
           hide-bottom-space
           v-model="address1"
-          class="col-grow"
+          class="col-9"
           :label="studentForm.address1.label"
         />
         <q-input
           filled
           hide-bottom-space
           v-model="address2"
-          class="q-ml-sm"
+          class="col q-ml-sm"
           :label="studentForm.address2.label"
         />
       </div>
       <div class="row">
+        <states-option clearable v-model="state" class="col" />
         <q-input
           filled
           hide-bottom-space
           v-model="city"
-          class="col-grow"
+          class="col q-ml-sm"
           :label="studentForm.city.label"
-        />
-        <q-input
-          filled
-          hide-bottom-space
-          v-model="state"
-          class="col-grow q-ml-sm"
-          :label="studentForm.state.label"
         />
       </div>
       <q-input

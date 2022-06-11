@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Division } from "./division";
+import { Division } from "@/models/entities/division";
 import DivisionForm from "./DivisionForm.vue";
 
 const handleSubmit = (student: Division) => {

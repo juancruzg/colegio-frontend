@@ -4,7 +4,7 @@ export interface Student {
   id: number;
   name: string;
   surname: string;
-  birthDate?: string | null;
+  birthDate?: Date | null;
   grade?: number | null;
   division?: string | null;
   address1?: string | null;
